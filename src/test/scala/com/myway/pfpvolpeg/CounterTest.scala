@@ -14,12 +14,12 @@ class CounterTest extends AnyFunSuite with Matchers {
       _ <- k.incr
       _ <- k.incr
       out <- k.get
+      _ <- k.incr
     } yield out
 
     val result = next.unsafeRunSync()
 
     result shouldBe 2
-
   }
 
 }
