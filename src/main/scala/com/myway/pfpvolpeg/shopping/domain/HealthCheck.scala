@@ -7,11 +7,11 @@ trait HealthCheck[F[_]] {
 case class RedisStatus(value: Status)
 case class PostgresStatus(value: Status)
 case class AppStatus(
-                      redis: RedisStatus,
-                      postgres: PostgresStatus
-                    )
+  redis: RedisStatus,
+  postgres: PostgresStatus
+)
 sealed trait Status
 
-case object Okay  extends Status
+case object Okay extends Status
 
 case object Unreachable extends Status

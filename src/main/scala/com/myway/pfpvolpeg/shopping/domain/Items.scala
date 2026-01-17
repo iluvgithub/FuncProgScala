@@ -15,33 +15,28 @@ trait Items[F[_]] {
   def update(item: UpdateItem): F[Unit]
 }
 
-
 final case class ItemId(value: UUID)
 
 case class ItemName(value: String)
 
 case class ItemDescription(value: String)
 case class Item(
-                 uuid: ItemId,
-                 name: ItemName,
-                 description: ItemDescription,
-                 price: Money,
-                 brand: Brand,
-                 category: Category
-               )
+  uuid: ItemId,
+  name: ItemName,
+  description: ItemDescription,
+  price: Money,
+  brand: Brand,
+  category: Category
+)
 case class CreateItem(
   name: ItemName,
   description: ItemDescription,
   price: Money,
   brandId: BrandId,
   categoryId: CategoryId
-  )
+)
 
 case class UpdateItem(
-                       id: ItemId,
-                       price: Money
-                     )
-
-
-
-
+  id: ItemId,
+  price: Money
+)

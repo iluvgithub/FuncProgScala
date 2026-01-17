@@ -17,7 +17,7 @@ class FirstIOTest extends AnyFunSuite with Matchers {
   }
   test("IO with sleep should complete within timeout (using unsafeRunTimed for safety)") {
     val io: IO[String] = IO.sleep(500.millis) >> IO.pure("awake")
-    val result = io.unsafeRunTimed(2.seconds)
+    val result         = io.unsafeRunTimed(2.seconds)
     result shouldBe Some("awake")
   }
   test("Composed IO program should produce expected result") {

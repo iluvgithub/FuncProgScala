@@ -10,11 +10,11 @@ class CounterTest extends AnyFunSuite with Matchers {
   test("in memory counter") {
     val counter: IO[Counter[IO]] = Counter.make[IO]
     val next: IO[Int] = for {
-      k <- counter
-      _ <- k.incr
-      _ <- k.incr
+      k   <- counter
+      _   <- k.incr
+      _   <- k.incr
       out <- k.get
-      _ <- k.incr
+      _   <- k.incr
     } yield out
 
     val result = next.unsafeRunSync()

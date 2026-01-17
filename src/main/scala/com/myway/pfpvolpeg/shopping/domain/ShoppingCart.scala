@@ -5,10 +5,10 @@ import java.util.UUID
 
 trait ShoppingCart[F[_]] {
   def add(
-           userId: UserId,
-           itemId: ItemId,
-           quantity: Quantity
-         ): F[Unit]
+    userId: UserId,
+    itemId: ItemId,
+    quantity: Quantity
+  ): F[Unit]
   def get(userId: UserId): F[CartTotal]
   def delete(userId: UserId): F[Unit]
   def removeItem(userId: UserId, itemId: ItemId): F[Unit]
@@ -20,5 +20,5 @@ case class CartItem(item: Item, quantity: Quantity)
 case class CartTotal(items: List[CartItem], total: Money)
 final case class Cart(uuid: UUID, items: Map[UUID, Int]) // itemId -> quantity
 
-trait CartError extends RuntimeException
-object EmptyCartError extends  CartError
+trait CartError       extends RuntimeException
+object EmptyCartError extends CartError
