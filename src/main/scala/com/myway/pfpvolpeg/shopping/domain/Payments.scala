@@ -2,6 +2,8 @@ package com.myway.pfpvolpeg.shopping.domain
 
 import squants.market.Money
 
+import scala.util.control.NoStackTrace
+
 trait PaymentClient[F[_]] {
   def process(payment: Payment): F[PaymentId]
 }
@@ -16,3 +18,4 @@ final case class Card(
   expiration: String, // MMYY, e.g. "0821"
   cvv: String         // 3-digit CVV
 )
+case class PaymentError(cause: String) extends NoStackTrace
