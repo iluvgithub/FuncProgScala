@@ -13,12 +13,12 @@ import squants.market.Money
 
 class CheckoutTest extends CatsEffectSuite {
 
-  val paymentClient = mock[PaymentClient[IO]]
-  val shoppingCart  = mock[ShoppingCart[IO]]
-  val orders        = mock[Orders[IO]]
-  val checkout      = Checkout(paymentClient, shoppingCart, orders)
-  val card          = mock[Card]
-  val userId        = mock[UserId]
+  val paymentClient: PaymentClient[IO] = mock[PaymentClient[IO]]
+  val shoppingCart: ShoppingCart[IO]   = mock[ShoppingCart[IO]]
+  val orders: Orders[IO]               = mock[Orders[IO]]
+  val checkout                         = Checkout(paymentClient, shoppingCart, orders)
+  val card: Card                       = mock[Card]
+  val userId: UserId                   = mock[UserId]
 
   val total: Money = mock[Money]
 
