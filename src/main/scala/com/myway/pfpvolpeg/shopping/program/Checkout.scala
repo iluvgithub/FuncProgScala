@@ -6,6 +6,7 @@ import cats.syntax.flatMap._
 import cats.syntax.functor._
 import com.myway.pfpvolpeg.shopping.domain._
 
+// https://github.com/gvolpe/pfps-examples/
 final case class Checkout[F[_]: MonadThrow](
   payments: PaymentClient[F],
   cart: ShoppingCart[F],
