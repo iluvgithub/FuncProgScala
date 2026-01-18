@@ -48,7 +48,7 @@ class CheckoutTest extends CatsEffectSuite {
     val item                  = mock[Item]
     val items: List[CartItem] = CartItem(item, Quantity(1)) :: Nil
     when(shoppingCart.get(userId)).thenReturn(IO(CartTotal(items, total)))
-    when(shoppingCart.delete(userId)).thenReturn(IO(userId))
+    when(shoppingCart.delete(userId)).thenReturn(IO.pure(()))
     val pid = mock[PaymentId]
     when(paymentClient.process(Payment(userId, any(), card))).thenReturn(IO(pid))
     val captor  = ArgumentCaptor.forClass(classOf[UserId])
