@@ -6,8 +6,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.profunktor</groupId>
-    <artifactId>shopping-cart</artifactId>
+    <groupId>com.myway</groupId>
+    <artifactId>func-prog-scala</artifactId>
     <version>2.0.0</version>
     <name>shopping-cart</name>
     <properties>
