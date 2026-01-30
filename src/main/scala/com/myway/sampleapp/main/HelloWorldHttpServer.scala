@@ -25,8 +25,10 @@ object HelloWorldHttpServer extends IOApp {
       .build
 
   override def run(args: List[String]): IO[ExitCode] =
-    server.use { _ =>
-      logger.info("HTTP server started on http://localhost:8080") >>
-        IO.never
-    }.as(ExitCode.Success)
+    server
+      .use { _ =>
+        logger.info("HTTP server started on http://localhost:8080") >>
+          IO.never
+      }
+      .as(ExitCode.Success)
 }

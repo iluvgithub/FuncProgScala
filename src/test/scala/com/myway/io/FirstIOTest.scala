@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.concurrent.duration._
 
 class FirstIOTest extends AnyFunSuite with Matchers {
+
   test("IO.pure should immediately return the value") {
     val io: IO[Int] = IO.pure(42)
 
@@ -15,11 +16,13 @@ class FirstIOTest extends AnyFunSuite with Matchers {
 
     result shouldBe 42
   }
+
   test("IO with sleep should complete within timeout (using unsafeRunTimed for safety)") {
     val io: IO[String] = IO.sleep(500.millis) >> IO.pure("awake")
     val result         = io.unsafeRunTimed(2.seconds)
     result shouldBe Some("awake")
   }
+
   test("Composed IO program should produce expected result") {
     val program: IO[Int] =
       for {
@@ -32,4 +35,5 @@ class FirstIOTest extends AnyFunSuite with Matchers {
 
     result shouldBe 42
   }
+
 }

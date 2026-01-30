@@ -46,4 +46,3 @@ class HttpRouteSuite extends CatsEffectSuite {
     }
   }
 }
-
