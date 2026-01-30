@@ -16,7 +16,6 @@ class SampleTestControlSuite extends CatsEffectSuite {
       out <- ref.get
     } yield out
 
-
   test("RefProgram updates Ref state over time direct syntax") {
 
     TestControl
