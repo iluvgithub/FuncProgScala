@@ -14,7 +14,7 @@ class FirstEffectSuite extends CatsEffectSuite {
 
   test("IO with sleep should complete within timeout") {
     val io: IO[String] =
-      IO.sleep(500.millis) >> IO.pure("awake")
+      IO.sleep(50.millis) >> IO.pure("awake")
 
     io.map { result =>
       assertEquals(result, "awake")
