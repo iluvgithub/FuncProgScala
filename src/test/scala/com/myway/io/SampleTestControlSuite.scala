@@ -5,19 +5,22 @@ import munit.CatsEffectSuite
 
 import scala.concurrent.duration._
 class SampleTestControlSuite extends CatsEffectSuite {
-  def run(ref: Ref[IO, List[Int]]): IO[Unit] =
+
+  def run(ref: Ref[IO, List[Int]]): IO[List[Int]] =
     for {
-      _ <- ref.update(_ :+ 1)
-      _ <- IO.sleep(1.second)
-      _ <- ref.update(_ :+ 2)
-      _ <- IO.sleep(1.second)
-      _ <- ref.update(_ :+ 3)
-    } yield ()
+      _   <- ref.update(_ :+ 1)
+      _   <- IO.sleep(1.second)
+      _   <- ref.update(_ :+ 2)
+      _   <- IO.sleep(1.second)
+      _   <- ref.update(_ :+ 3)
+      out <- ref.get
+    } yield out
 
-  test("RefProgram updates Ref state over time") {
 
-    val testIO: IO[List[Int]] =
-      for {
+  test("RefProgram updates Ref state over time direct syntax") {
+
+    TestControl
+      .executeEmbed(for {
         ref   <- Ref.of[IO, List[Int]](List.empty)
         s0    <- ref.get
         fiber <- run(ref).start
@@ -34,9 +37,6 @@ class SampleTestControlSuite extends CatsEffectSuite {
         assertEquals(s1, List(1))
         assertEquals(s2, List(1, 2))
         assertEquals(s3, List(1, 2, 3))
-        s2
-      }
-
-    TestControl.executeEmbed(testIO).map(_ => ())
+      })
   }
 }
