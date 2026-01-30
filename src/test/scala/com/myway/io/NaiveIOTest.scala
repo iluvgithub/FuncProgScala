@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
 
-class FirstIOTest extends AnyFunSuite with Matchers {
+class NaiveIOTest extends AnyFunSuite with Matchers {
 
   test("IO.pure should immediately return the value") {
     val io: IO[Int] = IO.pure(42)
