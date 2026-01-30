@@ -1,95 +1,319 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="
+          http://maven.apache.org/POM/4.0.0
+          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
-    <artifactId>scala-fp-practical</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
+    <groupId>dev.profunktor</groupId>
+    <artifactId>shopping-cart</artifactId>
+    <version>2.0.0</version>
+    <name>shopping-cart</name>
     <properties>
-        <scala.version>2.13.14</scala.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <scala.version>2.13.8</scala.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Library versions -->
+        <cats.version>2.7.0</cats.version>
+        <cats.effect.version>3.3.12</cats.effect.version>
+        <cats.retry.version>3.1.0</cats.retry.version>
+        <circe.version>0.14.2</circe.version>
+        <ciris.version>2.3.2</ciris.version>
+        <derevo.version>0.13.0</derevo.version>
+        <http4s.version>0.23.1</http4s.version>
+        <http4s.jwt.version>1.0.0</http4s.jwt.version>
+        <log4cats.version>2.3.1</log4cats.version>
+        <monocle.version>3.1.0</monocle.version>
+        <newtype.version>0.4.4</newtype.version>
+        <refined.version>0.9.29</refined.version>
+        <redis4cats.version>1.1.1</redis4cats.version>
+        <skunk.version>0.3.1</skunk.version>
+        <squants.version>1.8.3</squants.version>
+        <weaver.version>0.7.12</weaver.version>
+        <logback.version>1.2.11</logback.version>
+        <semanticdb.version>4.5.8</semanticdb.version>
+        <bettermonadicfor.version>0.3.1</bettermonadicfor.version>
     </properties>
 
-    <dependencies>
-        <!-- Scala library -->
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.typelevel</groupId>
-            <artifactId>cats-effect_2.13</artifactId>
-            <version>3.6.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Source: https://mvnrepository.com/artifact/com.github.cb372/cats-retry -->
-        <dependency>
-            <groupId>com.github.cb372</groupId>
-            <artifactId>cats-retry_2.13</artifactId>
-            <version>3.1.3</version>
-            <scope>compile</scope>
-        </dependency><!-- Source: https://mvnrepository.com/artifact/org.typelevel/log4cats-core -->
-        <dependency>
-            <groupId>org.typelevel</groupId>
-            <artifactId>log4cats-core_2.13</artifactId>
-            <version>2.7.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.typelevel</groupId>
-            <artifactId>squants_2.13</artifactId>
-            <version>1.8.3</version>
-        </dependency>
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+    <dependencies><!-- Monocle core for optics (Lens, Iso, Prism, etc.) -->
         <dependency>
             <groupId>dev.optics</groupId>
             <artifactId>monocle-core_2.13</artifactId>
-            <version>3.3.0</version>
-            <scope>compile</scope>
+            <version>${monocle.version}</version>
         </dependency>
+        <!-- Monocle law testing (for Discipline/ScalaCheck integration) -->
         <dependency>
-            <groupId>io.circe</groupId>
-            <artifactId>circe-core_2.13</artifactId>
-            <version>0.14.15</version>
-            <scope>compile</scope>
+            <groupId>dev.optics</groupId>
+            <artifactId>monocle-law_2.13</artifactId>
+            <version>${monocle.version}</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- ScalaTest for testing -->
+
+        <!-- Squants: quantities and money types -->
         <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_2.13</artifactId>
-            <version>3.2.18</version>
-            <scope>test</scope>
+            <groupId>org.typelevel</groupId>
+            <artifactId>squants_2.13</artifactId>
+            <version>${squants.version}</version>
+        </dependency>
+
+
+        <!-- Newtype library for zero-overhead type wrappers -->
+        <dependency>
+            <groupId>io.estatico</groupId>
+            <artifactId>newtype_2.13</artifactId>
+            <version>${newtype.version}</version>
+        </dependency>
+
+
+        <!-- Derevo core -->
+        <dependency>
+            <groupId>tf.tofu</groupId>
+            <artifactId>derevo-core_2.13</artifactId>
+            <version>${derevo.version}</version>
+        </dependency>
+
+        <!-- Derevo Cats integration -->
+        <dependency>
+            <groupId>tf.tofu</groupId>
+            <artifactId>derevo-cats_2.13</artifactId>
+            <version>${derevo.version}</version>
+        </dependency>
+
+        <!-- Derevo Circe + Magnolia integration -->
+        <dependency>
+            <groupId>tf.tofu</groupId>
+            <artifactId>derevo-circe-magnolia_2.13</artifactId>
+            <version>${derevo.version}</version>
+        </dependency>
+
+
+        <!-- Skunk PostgreSQL client -->
+        <dependency>
+            <groupId>org.tpolecat</groupId>
+            <artifactId>skunk-core_2.13</artifactId>
+            <version>${skunk.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.scalatestplus</groupId>
-            <artifactId>junit-4-13_2.13</artifactId>
-            <version>3.2.18.0</version>
+            <groupId>org.tpolecat</groupId>
+            <artifactId>skunk-circe_2.13</artifactId>
+            <version>${skunk.version}</version>
+        </dependency>
+
+        <!-- Redis4cats dependencies -->
+        <dependency>
+            <groupId>dev.profunktor</groupId>
+            <artifactId>redis4cats-effects_2.13</artifactId>
+            <version>${redis4cats.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.profunktor</groupId>
+            <artifactId>redis4cats-log4cats_2.13</artifactId>
+            <version>${redis4cats.version}</version>
+        </dependency>
+        <!-- Enumeratum core for EnumEntry -->
+        <dependency>
+            <groupId>com.beachape</groupId>
+            <artifactId>enumeratum_2.13</artifactId>
+            <version>1.7.2</version> <!-- latest stable for Scala 2.13 -->
+        </dependency>
+
+        <!-- Ciris integration with Enumeratum (optional, if using ciris-enumeratum) -->
+        <dependency>
+            <groupId>is.cir</groupId>
+            <artifactId>ciris-enumeratum_2.13</artifactId>
+            <version>${ciris.version}</version>
+        </dependency>
+
+        <!-- Core Libraries -->
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-core_2.13</artifactId>
+            <version>${cats.version}</version>
+        </dependency>
+
+        <!-- Cats Laws (for testing typeclass laws like MonoidTests) -->
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-laws_2.13</artifactId>
+            <version>${cats.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- Source: https://mvnrepository.com/artifact/org.mockito/mockito-scala -->
+
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-scala_2.13</artifactId>
-            <version>2.0.0</version>
-            <scope>test</scope>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-effect_2.13</artifactId>
+            <version>${cats.effect.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.cb372</groupId>
+            <artifactId>cats-retry_2.13</artifactId>
+            <version>${cats.retry.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>log4cats-core_2.13</artifactId>
+            <version>${log4cats.version}</version>
         </dependency>
         <dependency>
             <groupId>org.typelevel</groupId>
-            <artifactId>munit-cats-effect_2.13</artifactId>
-            <version>2.1.0</version>
+            <artifactId>log4cats-slf4j_2.13</artifactId>
+            <version>${log4cats.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>log4cats-slf4j_2.13</artifactId>
+            <version>${log4cats.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>log4cats-noop_2.13</artifactId>
+            <version>${log4cats.version}</version>
+            <scope>test</scope> <!-- usually only needed for tests -->
+        </dependency>
+        <!-- Ciris Refined integration -->
+        <dependency>
+            <groupId>is.cir</groupId>
+            <artifactId>ciris-refined_2.13</artifactId>
+            <version>${ciris.version}</version>
+        </dependency>
+
+        <!-- Refined core and cats support (already needed for refined types) -->
+        <dependency>
+            <groupId>eu.timepit</groupId>
+            <artifactId>refined_2.13</artifactId>
+            <version>${refined.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.timepit</groupId>
+            <artifactId>refined-cats_2.13</artifactId>
+            <version>${refined.version}</version>
+        </dependency><dependency>
+            <groupId>eu.timepit</groupId>
+            <artifactId>refined-scalacheck_2.13</artifactId>
+            <version>${refined.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-core_2.13</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-generic_2.13</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-parser_2.13</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.circe</groupId>
+            <artifactId>circe-refined_2.13</artifactId>
+            <version>${circe.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.http4s</groupId>
+            <artifactId>http4s-dsl_2.13</artifactId>
+            <version>${http4s.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.http4s</groupId>
+            <artifactId>http4s-ember-server_2.13</artifactId>
+            <version>${http4s.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.http4s</groupId>
+            <artifactId>http4s-ember-client_2.13</artifactId>
+            <version>${http4s.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.http4s</groupId>
+            <artifactId>http4s-circe_2.13</artifactId>
+            <version>${http4s.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.profunktor</groupId>
+            <artifactId>http4s-jwt-auth_2.13</artifactId>
+            <version>${http4s.jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Compiler Plugins (provided) --><!-- Source: https://mvnrepository.com/artifact/org.typelevel/kind-projector -->
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>kind-projector_2.13.8</artifactId>
+            <version>0.13.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.olegpy</groupId>
+            <artifactId>better-monadic-for_2.13</artifactId>
+            <version>${bettermonadicfor.version}</version>
+            <scope>provided</scope>
+        </dependency><!-- Source: https://mvnrepository.com/artifact/org.scalameta/semanticdb-scalac -->
+        <dependency>
+            <groupId>org.scalameta</groupId>
+            <artifactId>semanticdb-scalac_2.13.15</artifactId>
+            <version>4.14.3</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>com.disneystreaming</groupId>
+            <artifactId>weaver-cats_2.13</artifactId>
+            <version>${weaver.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.8.0</version>
+            <groupId>com.disneystreaming</groupId>
+            <artifactId>weaver-discipline_2.13</artifactId>
+            <version>${weaver.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.disneystreaming</groupId>
+            <artifactId>weaver-scalacheck_2.13</artifactId>
+            <version>${weaver.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalameta</groupId>
+            <artifactId>munit_2.13</artifactId>
+            <version>0.7.29</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- MUnit Cats Effect 3 integration -->
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>munit-cats-effect-3_2.13</artifactId>
+            <version>1.0.7</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -98,33 +322,24 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.8.1</version>
+                <version>4.6.0</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
+                        <configuration>
+                            <args>
+                                <arg>-Ymacro-annotations</arg>
+                                <arg>-Yrangepos</arg>
+                                <arg>-Wconf:cat=unused:info</arg>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
-
-                <configuration>
-                    <recompileMode>incremental</recompileMode>
-                    <includes>
-                        <include>**/*.scala</include>
-                    </includes>
-                </configuration>
             </plugin>
 
-            <!-- Java Compiler Plugin -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
@@ -143,23 +358,31 @@
                     </scala>
                 </configuration>
             </plugin>
+
+            <!-- Maven Shade Plugin for fat JAR -->
             <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-                <version>2.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
-                        <id>test</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>test</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>dev.profunktor.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
-                </configuration>
             </plugin>
+
         </plugins>
     </build>
-</project>
 
+</project>
