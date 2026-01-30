@@ -314,6 +314,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-effect-testkit_2.13</artifactId>
+            <version>3.5.4</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
