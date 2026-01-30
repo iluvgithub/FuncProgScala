@@ -12,14 +12,12 @@
     <name>shopping-cart</name>
     <properties>
         <scala.version>2.13.8</scala.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Library versions -->
-        <cats.version>2.7.0</cats.version>
-        <cats.effect.version>3.3.12</cats.effect.version>
-        <cats.retry.version>3.1.0</cats.retry.version>
+        <!-- Core -->
+        <cats.version>2.10.0</cats.version>
+        <cats.effect.version>3.6.3</cats.effect.version>
+
+        <!-- Libraries -->
         <circe.version>0.14.2</circe.version>
         <ciris.version>2.3.2</ciris.version>
         <derevo.version>0.13.0</derevo.version>
@@ -34,8 +32,6 @@
         <squants.version>1.8.3</squants.version>
         <weaver.version>0.7.12</weaver.version>
         <logback.version>1.2.11</logback.version>
-        <semanticdb.version>4.5.8</semanticdb.version>
-        <bettermonadicfor.version>0.3.1</bettermonadicfor.version>
     </properties>
 
     <repositories>
@@ -142,6 +138,12 @@
             <version>${cats.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-kernel_2.13</artifactId>
+            <version>${cats.version}</version>
+        </dependency>
+
         <!-- Cats Laws (for testing typeclass laws like MonoidTests) -->
         <dependency>
             <groupId>org.typelevel</groupId>
@@ -155,10 +157,16 @@
             <artifactId>cats-effect_2.13</artifactId>
             <version>${cats.effect.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>com.github.cb372</groupId>
-            <artifactId>cats-retry_2.13</artifactId>
-            <version>${cats.retry.version}</version>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-effect-kernel_2.13</artifactId>
+            <version>${cats.effect.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.typelevel</groupId>
+            <artifactId>cats-effect-std_2.13</artifactId>
+            <version>${cats.effect.version}</version>
         </dependency>
 
         <dependency>
@@ -267,12 +275,6 @@
             <version>0.13.4</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.olegpy</groupId>
-            <artifactId>better-monadic-for_2.13</artifactId>
-            <version>${bettermonadicfor.version}</version>
-            <scope>provided</scope>
-        </dependency><!-- Source: https://mvnrepository.com/artifact/org.scalameta/semanticdb-scalac -->
         <dependency>
             <groupId>org.scalameta</groupId>
             <artifactId>semanticdb-scalac_2.13.15</artifactId>
