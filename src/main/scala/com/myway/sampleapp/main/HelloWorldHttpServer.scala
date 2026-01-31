@@ -26,15 +26,15 @@ object HelloWorldHttpServer extends IOApp {
       .build
 
   override def run(args: List[String]): IO[ExitCode] =
-    server(
-      HttpServerConfig(
-        com.comcast.ip4s.Hostname.fromString("0.0.0.0").get,
-        com.comcast.ip4s.Port.fromInt(8080).get
+    for {
+      httpServerConfig <- IO(
+        HttpServerConfig(
+          com.comcast.ip4s.Hostname.fromString("0.0.0.0").get,
+          com.comcast.ip4s.Port.fromInt(8080).get
+        )
       )
-    )
-      .use { _ =>
-        logger.info("HTTP server started on http://localhost:8080") >>
-          IO.never
-      }
-      .as(ExitCode.Success)
+      _ <- server(httpServerConfig)
+        .use(_ => logger.info(s"HTTP server started on $httpServerConfig") >> IO.never)
+    } yield ExitCode.Success
+
 }
