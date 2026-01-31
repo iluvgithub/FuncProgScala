@@ -12,7 +12,7 @@ class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
   test("drains queue in parallel and shows state changes over time") {
 
     val maxConcurrent = 2
-    val queueSize     = 5
+    val queueSize     = 7
     val program = for {
       queue     <- Queue.unbounded[IO, Int]
       processed <- Ref.of[IO, List[Int]](List.empty)
@@ -20,7 +20,7 @@ class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
       _ <- List.range(0, queueSize).foldLeft(IO(()))((o, n) => o >> queue.offer(n))
 
       fiber <- Fs2StreamParallelQueueDrain
-        .drainQueue(maxConcurrent, queue, processed)
+        .drainQueue[IO,Int](maxConcurrent, queue, processed, _ <= 4)
         .compile
         .drain
         .start
@@ -36,7 +36,7 @@ class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
       _  <- IO.sleep(1.second)
       s3 <- processed.get
 
-      _ <- fiber.cancel
+    //  _ <- fiber.cancel
     } yield (s0, s1, s2, s3)
 
     TestControl.executeEmbed(program).map { case (s0, s1, s2, s3) =>

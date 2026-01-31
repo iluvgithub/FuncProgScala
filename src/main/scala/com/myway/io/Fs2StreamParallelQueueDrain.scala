@@ -11,10 +11,12 @@ object Fs2StreamParallelQueueDrain {
   def drainQueue[F[_]: Temporal, A](
     maxConcurrent: Int,
     queue: Queue[F, A],
-    processed: Ref[F, List[A]]
+    processed: Ref[F, List[A]],
+    keepGoing: A => Boolean
   ): Stream[F, Unit] =
     Stream
       .fromQueueUnterminated(queue)
+      .takeWhile(keepGoing)
       .parEvalMap(maxConcurrent) { elem =>
         Temporal[F].sleep(900.millis) *> processed.update(_ :+ elem)
       }
