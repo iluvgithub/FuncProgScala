@@ -23,7 +23,7 @@
         <derevo.version>0.13.0</derevo.version>
         <http4s.version>0.23.33</http4s.version>
         <http4s.jwt.version>1.0.0</http4s.jwt.version>
-        <log4cats.version>2.3.1</log4cats.version>
+        <log4cats.version>2.7.1</log4cats.version>
         <monocle.version>3.2.0</monocle.version>
         <newtype.version>0.4.4</newtype.version>
         <refined.version>0.9.29</refined.version>
@@ -31,7 +31,7 @@
         <skunk.version>0.3.1</skunk.version>
         <squants.version>1.8.3</squants.version>
         <weaver.version>0.7.12</weaver.version>
-        <logback.version>1.4.14</logback.version>
+        <logback.version>1.5.12</logback.version>
         <cats.retry.version>3.1.3</cats.retry.version>
     </properties>
 
