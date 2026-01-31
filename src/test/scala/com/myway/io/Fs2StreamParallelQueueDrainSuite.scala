@@ -7,6 +7,7 @@ import munit.CatsEffectSuite
 
 import scala.concurrent.duration.DurationInt
 // https://medium.com/@fqaiser94/using-testcontrol-to-test-fs2-streams-92cec1fac217
+
 class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
   test("drains queue in parallel and shows state changes over time") {
 
