@@ -31,7 +31,7 @@
         <skunk.version>0.3.1</skunk.version>
         <squants.version>1.8.3</squants.version>
         <weaver.version>0.7.12</weaver.version>
-        <logback.version>1.5.12</logback.version>
+        <logback.version>1.5.26</logback.version>
         <cats.retry.version>3.1.3</cats.retry.version>
     </properties>
 
@@ -185,6 +185,11 @@
             <groupId>org.typelevel</groupId>
             <artifactId>log4cats-slf4j_2.13</artifactId>
             <version>${log4cats.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.17</version>
         </dependency>
 
         <dependency>
