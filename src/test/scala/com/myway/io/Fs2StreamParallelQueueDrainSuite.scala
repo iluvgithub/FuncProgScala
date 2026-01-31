@@ -24,14 +24,11 @@ class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
         .drain
         .start
 
-      // initial state
       s0 <- processed.get
 
-      // after 1 second (two elements should complete)
       _  <- IO.sleep(1.second)
       s1 <- processed.get
 
-      // after 2 seconds (all elements should complete)
       _  <- IO.sleep(1.second)
       s2 <- processed.get
 
