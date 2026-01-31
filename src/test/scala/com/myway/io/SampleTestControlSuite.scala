@@ -18,25 +18,23 @@ class SampleTestControlSuite extends CatsEffectSuite {
     } yield out
 
   test("RefProgram updates Ref state over time direct syntax") {
+    TestControl.executeEmbed(for {
+      ref   <- Ref.of[IO, List[Int]](List.empty)
+      s0    <- ref.get
+      fiber <- run(ref).start
+      _     <- IO.sleep(100.millis)
+      s1    <- ref.get
 
-    TestControl
-      .executeEmbed(for {
-        ref   <- Ref.of[IO, List[Int]](List.empty)
-        s0    <- ref.get
-        fiber <- run(ref).start
-        _     <- IO.sleep(100.millis)
-        s1    <- ref.get
+      _  <- IO.sleep(1.second)
+      s2 <- ref.get
 
-        _  <- IO.sleep(1.second)
-        s2 <- ref.get
-
-        _  <- fiber.join
-        s3 <- ref.get
-      } yield {
-        assertEquals(s0, List())
-        assertEquals(s1, List(1))
-        assertEquals(s2, List(1, 2))
-        assertEquals(s3, List(1, 2, 3))
-      })
+      _  <- fiber.join
+      s3 <- ref.get
+    } yield {
+      assertEquals(s0, List())
+      assertEquals(s1, List(1))
+      assertEquals(s2, List(1, 2))
+      assertEquals(s3, List(1, 2, 3))
+    })
   }
 }
