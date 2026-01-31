@@ -10,7 +10,8 @@ import scala.concurrent.duration.DurationInt
 class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
   test("drains queue in parallel and shows state changes over time") {
 
-    val queueSize = 5
+    val maxConcurrent = 2
+    val queueSize     = 5
     val program = for {
       queue     <- Queue.unbounded[IO, Int]
       processed <- Ref.of[IO, List[Int]](List.empty)
@@ -18,7 +19,7 @@ class Fs2StreamParallelQueueDrainSuite extends CatsEffectSuite {
       _ <- List.range(0, queueSize).foldLeft(IO(()))((o, n) => o >> queue.offer(n))
 
       fiber <- Fs2StreamParallelQueueDrain
-        .drainQueue(queue, processed)
+        .drainQueue(maxConcurrent, queue, processed)
         .compile
         .drain
         .start
