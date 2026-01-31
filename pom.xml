@@ -16,7 +16,7 @@
         <!-- Core -->
         <cats.version>2.10.0</cats.version>
         <cats.effect.version>3.6.3</cats.effect.version>
-
+        <fs2.version>3.11.0</fs2.version>
         <!-- Libraries -->
         <circe.version>0.14.2</circe.version>
         <ciris.version>2.3.2</ciris.version>
@@ -24,7 +24,7 @@
         <http4s.version>0.23.1</http4s.version>
         <http4s.jwt.version>1.0.0</http4s.jwt.version>
         <log4cats.version>2.3.1</log4cats.version>
-        <monocle.version>3.1.0</monocle.version>
+        <monocle.version>3.2.0</monocle.version>
         <newtype.version>0.4.4</newtype.version>
         <refined.version>0.9.29</refined.version>
         <redis4cats.version>1.1.1</redis4cats.version>
@@ -94,18 +94,6 @@
         </dependency>
 
 
-        <!-- Skunk PostgreSQL client -->
-        <dependency>
-            <groupId>org.tpolecat</groupId>
-            <artifactId>skunk-core_2.13</artifactId>
-            <version>${skunk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.tpolecat</groupId>
-            <artifactId>skunk-circe_2.13</artifactId>
-            <version>${skunk.version}</version>
-        </dependency>
-
         <!-- Redis4cats dependencies -->
         <dependency>
             <groupId>dev.profunktor</groupId>
@@ -170,6 +158,19 @@
         </dependency>
 
         <dependency>
+            <groupId>co.fs2</groupId>
+            <artifactId>fs2-core_2.13</artifactId>  <!-- or fs2-core_3 for Scala 3 -->
+            <version>${fs2.version}</version>               <!-- or 3.12.0 / latest patch -->
+        </dependency>
+
+        <!-- Optional: reactive / concurrent extras -->
+        <dependency>
+            <groupId>co.fs2</groupId>
+            <artifactId>fs2-reactive-streams_2.13</artifactId>
+            <version>${fs2.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.typelevel</groupId>
             <artifactId>log4cats-core_2.13</artifactId>
             <version>${log4cats.version}</version>
@@ -180,11 +181,6 @@
             <version>${log4cats.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.typelevel</groupId>
-            <artifactId>log4cats-slf4j_2.13</artifactId>
-            <version>${log4cats.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.typelevel</groupId>
             <artifactId>log4cats-noop_2.13</artifactId>
