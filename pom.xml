@@ -21,17 +21,17 @@
         <circe.version>0.14.2</circe.version>
         <ciris.version>2.3.2</ciris.version>
         <derevo.version>0.13.0</derevo.version>
-        <http4s.version>0.23.1</http4s.version>
+        <http4s.version>0.23.33</http4s.version>
         <http4s.jwt.version>1.0.0</http4s.jwt.version>
         <log4cats.version>2.3.1</log4cats.version>
         <monocle.version>3.2.0</monocle.version>
         <newtype.version>0.4.4</newtype.version>
         <refined.version>0.9.29</refined.version>
-        <redis4cats.version>1.1.1</redis4cats.version>
+        <redis4cats.version>2.0.2</redis4cats.version>
         <skunk.version>0.3.1</skunk.version>
         <squants.version>1.8.3</squants.version>
         <weaver.version>0.7.12</weaver.version>
-        <logback.version>1.2.11</logback.version>
+        <logback.version>1.4.14</logback.version>
     </properties>
 
     <repositories>
@@ -192,23 +192,6 @@
             <groupId>is.cir</groupId>
             <artifactId>ciris-refined_2.13</artifactId>
             <version>${ciris.version}</version>
-        </dependency>
-
-        <!-- Refined core and cats support (already needed for refined types) -->
-        <dependency>
-            <groupId>eu.timepit</groupId>
-            <artifactId>refined_2.13</artifactId>
-            <version>${refined.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.timepit</groupId>
-            <artifactId>refined-cats_2.13</artifactId>
-            <version>${refined.version}</version>
-        </dependency><dependency>
-            <groupId>eu.timepit</groupId>
-            <artifactId>refined-scalacheck_2.13</artifactId>
-            <version>${refined.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
