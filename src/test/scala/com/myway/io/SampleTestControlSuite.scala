@@ -1,17 +1,18 @@
 package com.myway.io
 import cats.effect._
 import cats.effect.testkit.TestControl
+import cats.syntax.all._
 import munit.CatsEffectSuite
 
 import scala.concurrent.duration._
 class SampleTestControlSuite extends CatsEffectSuite {
 
-  def run(ref: Ref[IO, List[Int]]): IO[List[Int]] =
+  def run[F[_]: Temporal](ref: Ref[F, List[Int]]): F[List[Int]] =
     for {
       _   <- ref.update(_ :+ 1)
-      _   <- IO.sleep(1.second)
+      _   <- Temporal[F].sleep(1.second)
       _   <- ref.update(_ :+ 2)
-      _   <- IO.sleep(1.second)
+      _   <- Temporal[F].sleep(1.second)
       _   <- ref.update(_ :+ 3)
       out <- ref.get
     } yield out
