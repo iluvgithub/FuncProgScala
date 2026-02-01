@@ -42,6 +42,5 @@ object AppConfigLoader {
     source: ConfigSource = ConfigSource.resources("application.conf")
   ): F[AppConfig] = source.loadF[F, AppConfig]
 
-  // Async[F].map(source.loadF[F, HttpConfig]())(AppConfig(_))
 
-} // or pureconfig.generic.auto.exported if using Scala 3 style in 2.13 project
+}
