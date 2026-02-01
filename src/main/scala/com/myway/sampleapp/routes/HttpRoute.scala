@@ -2,6 +2,7 @@ package com.myway.sampleapp.routes
 
 import cats.effect._
 import cats.syntax.all._
+import com.myway.sampleapp.service.Service
 import org.http4s._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.implicits._
@@ -14,7 +15,7 @@ object HttpRoute {
   implicit def logger[F[_]: Sync]: Logger[F] =
     Slf4jLogger.getLogger[F]
 
-  def routes[F[_]: Async: Logger]: HttpRoutes[F] = {
+  def routes[F[_]: Async: Logger](service: Service[F]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F] {}
     import dsl._
 
@@ -38,13 +39,13 @@ object HttpRoute {
             )
         }
 
-      case req @ GET -> Root / "service" / "subservice" =>
+      case req @ GET -> Root / "redis" / "read" =>
         Logger[F].info(s"GET ${req.uri}") *>
-          Ok("subservice ")
+          Ok("redis read ")
 
-      case req @ GET -> Root / "service" / "subservice2" =>
+      case req @ GET -> Root / "redis" / "write" =>
         Logger[F].info(s"GET ${req.uri}") *>
-          Ok("subservice 2")
+          Ok("redis write")
 
       case req @ GET -> Root =>
         Logger[F].info(s"GET ${req.uri}") *>
@@ -62,7 +63,7 @@ object HttpRoute {
     }
   }
 
-  def httpApp[F[_]: Async: Logger]: HttpApp[F] =
-    Router("/" -> routes[F]).orNotFound
+  def httpApp[F[_]: Async: Logger](service: Service[F]): HttpApp[F] =
+    Router("/" -> routes[F](service)).orNotFound
 
 }

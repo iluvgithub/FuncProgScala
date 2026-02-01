@@ -3,6 +3,7 @@ package com.myway.sampleapp.main
 import cats.effect._
 import com.myway.sampleapp.config.{AppConfigLoader, HttpServerConfig}
 import com.myway.sampleapp.routes.HttpRoute
+import com.myway.sampleapp.service.SampleService
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
 import org.slf4j
@@ -22,7 +23,7 @@ object HelloWorldHttpServer extends IOApp {
       .default[IO]
       .withHost(httpConfig.host)
       .withPort(httpConfig.port)
-      .withHttpApp(HttpRoute.httpApp[IO])
+      .withHttpApp(HttpRoute.httpApp[IO](SampleService()))
       .withShutdownTimeout(5.seconds)
       .build
 
