@@ -2,12 +2,12 @@ package com.myway.sampleapp.routes
 
 import cats.data.Kleisli
 import cats.effect.IO
+import com.myway.sampleapp.routes.HttpRoute._
+import com.myway.sampleapp.service.Service
 import munit.CatsEffectSuite
 import org.http4s.Method._
 import org.http4s._
 import org.http4s.implicits._
-import com.myway.sampleapp.routes.HttpRoute._
-import com.myway.sampleapp.service.Service
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.{verify, when}
 import org.mockito.MockitoSugar.mock
@@ -16,7 +16,7 @@ class HttpRouteSuite extends CatsEffectSuite {
 
   val mockService: Service[IO] = mock[Service[IO]]
 
-  def routeToTest: Kleisli[IO, Request[IO], Response[IO]] =  routes[IO](mockService).orNotFound
+  def routeToTest: Kleisli[IO, Request[IO], Response[IO]] = routes[IO](mockService).orNotFound
 
   test("GET /health returns 200 OK") {
     val req = Request[IO](GET, uri"/health")
@@ -38,7 +38,7 @@ class HttpRouteSuite extends CatsEffectSuite {
     }
   }
 
-  test("GET /echo?arg1=toto returns arg1") {
+  test("GET /echo?arg=toto returns TOTO") {
     val req = Request[IO](GET, uri"/service?arg=toto")
     when(mockService.sampleService(anyString())).thenReturn(IO("TOTO"))
     routeToTest.run(req).flatMap { resp =>
@@ -64,19 +64,24 @@ class HttpRouteSuite extends CatsEffectSuite {
     }
   }
 
-
   test("GET /redis read") {
-    val req = Request[IO](GET, uri"/redis/read")
-    routeToTest.run(req).map { resp =>
+    val req = Request[IO](GET, uri"/redis/read?key=abc")
+    when(mockService.redisRead(anyString())).thenReturn(IO("out"))
+    routeToTest.run(req).flatMap { resp =>
       assertEquals(resp.status, Status.Ok)
+      verify(mockService).redisRead("abc")
+      resp.as[String].map { body =>
+        assertEquals(body, "redis.read:out")
+      }
     }
   }
 
-
   test("GET /redis write") {
-    val req = Request[IO](GET, uri"/redis/write")
+    val req = Request[IO](GET, uri"/redis/write?key=abc&value=Abcd")
+    when(mockService.redisWrite("abc", "Abcd")).thenReturn(IO(()))
     routeToTest.run(req).map { resp =>
       assertEquals(resp.status, Status.Ok)
+      verify(mockService).redisWrite("abc", "Abcd")
     }
   }
 }

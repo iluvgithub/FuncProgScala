@@ -31,25 +31,35 @@ object HttpRoute {
 
       case req @ GET -> Root / "service" =>
         req.params.get("arg") match {
-          case Some(arg) =>
-            val out: F[String] = service.sampleService(arg)
-            Logger[F].info(s"GET service ${req.uri}, arg:$arg") *> out.flatMap(outcome =>
-              Ok(s"out=$outcome")
-            )
-
-          case None =>
-            Logger[F].info(s"GET service ${req.uri}, KO") *> BadRequest(
-              "Missing query parameter arg1"
-            )
+          case Some(arg) => service.sampleService(arg).flatMap(out => Ok(s"service:$out"))
+          case None      => BadRequest("no arg")
         }
 
       case req @ GET -> Root / "redis" / "read" =>
-        Logger[F].info(s"GET ${req.uri}") *>
-          Ok("redis read ")
-
+        req.params.get("key") match {
+          case Some(arg) =>
+            for {
+              readVal <- service.redisRead(arg)
+              _       <- Logger[F].info(s"Redis read ok ${req.uri}, read:$readVal")
+              o       <- Ok(s"redis.read:$readVal")
+            } yield o
+          case None => Logger[F].info(s"Redis read KO ${req.uri}") *> BadRequest("no arg")
+        }
       case req @ GET -> Root / "redis" / "write" =>
-        Logger[F].info(s"GET ${req.uri}") *>
-          Ok("redis write")
+        val optArg: Option[(String, String)] = for {
+          key   <- req.params.get("key")
+          value <- req.params.get("value")
+        } yield (key, value)
+
+        optArg match {
+          case Some((k, v)) =>
+            for {
+              _ <- service.redisWrite(k, v)
+              _ <- Logger[F].info(s"Redis read ok ${req.uri}")
+              o <- Ok(s"redis.write key=[$k] val=[$v]")
+            } yield o
+          case None => Logger[F].info(s"Redis write KO ${req.uri}") *> BadRequest("no key/value")
+        }
 
       case req @ GET -> Root =>
         Logger[F].info(s"GET ${req.uri}") *>
