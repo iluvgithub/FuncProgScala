@@ -1,7 +1,7 @@
 package com.myway.sampleapp.main
 
 import cats.effect._
-import com.myway.sampleapp.config.HttpServerConfig
+import com.myway.sampleapp.config.{AppConfigLoader, HttpServerConfig}
 import com.myway.sampleapp.routes.HttpRoute
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.server.Server
@@ -24,14 +24,9 @@ object HelloWorldHttpServer extends IOApp {
       .build
 
   override def run(args: List[String]): IO[ExitCode] = for {
-    httpConfig <- IO(
-      HttpServerConfig(
-        com.comcast.ip4s.Hostname.fromString("0.0.0.0").get,
-        com.comcast.ip4s.Port.fromInt(8080).get
-      )
-    )
-    _ <- server(httpConfig)
-      .use(_ => logger.info("HTTP server started on http://localhost:8080") >> IO.never)
+    appConfig <- AppConfigLoader.loadConfig[IO]()
+    httpCfg   <- appConfig.getHttpServerConfig[IO]
+    _ <- server(httpCfg).use(_ => logger.info(s"HTTP server started on ${appConfig}") >> IO.never)
   } yield ExitCode.Success
 
 }
