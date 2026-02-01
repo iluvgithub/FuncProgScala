@@ -13,6 +13,7 @@ import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 import scala.concurrent.duration._
 // Swagger: https://chatgpt.com/c/69791f56-1ec4-838e-b118-963d25004c79
+//  curl -X POST http://localhost:8080'
 object HelloWorldHttpServer extends IOApp {
 
   implicit val logger: Logger[IO]   = Slf4jLogger.getLogger[IO]
