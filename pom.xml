@@ -11,7 +11,7 @@
     <version>2.0.0</version>
     <name>shopping-cart</name>
     <properties>
-        <scala.version>2.13.8</scala.version>
+        <scala.version>2.13.10</scala.version>
 
         <!-- Core -->
         <cats.version>2.10.0</cats.version>
@@ -227,7 +227,7 @@
             <version>${log4cats.version}</version>
             <scope>test</scope> <!-- usually only needed for tests -->
         </dependency>
-        <!-- Ciris Refined integration -->
+
         <dependency>
             <groupId>io.circe</groupId>
             <artifactId>circe-core_2.13</artifactId>
@@ -241,11 +241,6 @@
         <dependency>
             <groupId>io.circe</groupId>
             <artifactId>circe-parser_2.13</artifactId>
-            <version>${circe.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.circe</groupId>
-            <artifactId>circe-refined_2.13</artifactId>
             <version>${circe.version}</version>
         </dependency>
         <dependency>
