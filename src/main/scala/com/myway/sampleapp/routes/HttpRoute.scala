@@ -32,7 +32,11 @@ object HttpRoute {
       case req @ GET -> Root / "service" =>
         req.params.get("arg") match {
           case Some(arg) =>
-            Logger[F].info(s"GET service ${req.uri}, OK") *> Ok(s"Received arg = $arg")
+            val out: F[String] = service.sampleService(arg)
+            Logger[F].info(s"GET service ${req.uri}, arg:$arg") *> out.flatMap(outcome =>
+              Ok(s"out=$outcome")
+            )
+
           case None =>
             Logger[F].info(s"GET service ${req.uri}, KO") *> BadRequest(
               "Missing query parameter arg1"
