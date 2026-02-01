@@ -3,7 +3,6 @@ package com.myway.sampleapp.config
 import cats.effect.Async
 import com.comcast.ip4s.{Host, Port}
 import pureconfig._
-import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax.CatsEffectConfigSource
 case class HttpServerConfig(
@@ -32,10 +31,9 @@ final case class AppConfig(httpConfig: HttpConfig) {
     fromOption(makeHttpServerConfigOpt, new RuntimeException)
 }
 
-object AppConfigLoader { 
+object AppConfigLoader {
   def loadConfig[F[_]: Async](
     source: ConfigSource = ConfigSource.resources("application.conf")
   ): F[AppConfig] = source.loadF[F, AppConfig]
-
 
 }
