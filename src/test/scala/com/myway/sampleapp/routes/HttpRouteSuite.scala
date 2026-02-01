@@ -66,12 +66,12 @@ class HttpRouteSuite extends CatsEffectSuite {
 
   test("GET /redis read") {
     val req = Request[IO](GET, uri"/redis/read?key=abc")
-    when(mockService.redisRead(anyString())).thenReturn(IO("out"))
+    when(mockService.redisRead(anyString())).thenReturn(IO(Some("out")))
     routeToTest.run(req).flatMap { resp =>
       assertEquals(resp.status, Status.Ok)
       verify(mockService).redisRead("abc")
       resp.as[String].map { body =>
-        assertEquals(body, "redis.read:out")
+        assertEquals(body, "redis.read:Some(out)")
       }
     }
   }
