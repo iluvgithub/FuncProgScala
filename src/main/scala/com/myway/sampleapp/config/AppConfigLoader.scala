@@ -32,12 +32,7 @@ final case class AppConfig(httpConfig: HttpConfig) {
     fromOption(makeHttpServerConfigOpt, new RuntimeException)
 }
 
-object AppConfigLoader {
-  implicit def httpHint: ProductHint[HttpConfig] =
-    ProductHint[HttpConfig](ConfigFieldMapping(CamelCase, KebabCase))
-
-  implicit def appHint: ProductHint[AppConfig] =
-    ProductHint[AppConfig](ConfigFieldMapping(CamelCase, KebabCase))
+object AppConfigLoader { 
   def loadConfig[F[_]: Async](
     source: ConfigSource = ConfigSource.resources("application.conf")
   ): F[AppConfig] = source.loadF[F, AppConfig]
