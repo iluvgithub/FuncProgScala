@@ -34,11 +34,11 @@ class AppConfigLoaderSuite extends CatsEffectSuite {
       for {
         appConfig <- AppConfigLoader.loadConfig[IO](source)
         http      <- appConfig.getHttpServerConfig[IO]
-        redis      = appConfig.redisConfig
+        redis = appConfig.redisConfig
       } yield {
         assertEquals(http.host, Host.fromString("127.0.0.1").get)
         assertEquals(http.port, Port.fromInt(8080).get)
-        assertEquals(redis.host,  "localhost")
+        assertEquals(redis.host, "localhost")
         assertEquals(redis.port, 6379)
       }
     }
