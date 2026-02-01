@@ -30,8 +30,10 @@ object HttpRoute {
 
       case req @ GET -> Root / "service" =>
         req.params.get("arg") match {
-          case Some(arg) => Ok(s"Received arg = $arg")
-          case None      => BadRequest("Missing query parameter arg1")
+          case Some(arg) =>
+            Logger[F].info(s"GET service ${req.uri}, OK") *>  Ok(s"Received arg = $arg")
+          case None      =>
+            Logger[F].info(s"GET service ${req.uri}, KO") *> BadRequest("Missing query parameter arg1")
         }
 
       case req @ GET -> Root / "service" / "subservice" =>
