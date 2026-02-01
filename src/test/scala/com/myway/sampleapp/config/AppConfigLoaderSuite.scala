@@ -17,9 +17,16 @@ class AppConfigLoaderSuite extends CatsEffectSuite {
   }
   test("AppConfigLoader should correctly load valid minimal configuration") {
     val configContent =
-      """http-config {
+      """
+        |
+        |http-config {
         |  host = "127.0.0.1"
         |  port = 8080
+        |}
+        |
+        |redis-config {
+        |  host = "localhost"
+        |  port = 6379
         |}
         |""".stripMargin
 
@@ -27,9 +34,12 @@ class AppConfigLoaderSuite extends CatsEffectSuite {
       for {
         appConfig <- AppConfigLoader.loadConfig[IO](source)
         http      <- appConfig.getHttpServerConfig[IO]
+        redis      = appConfig.redisConfig
       } yield {
         assertEquals(http.host, Host.fromString("127.0.0.1").get)
         assertEquals(http.port, Port.fromInt(8080).get)
+        assertEquals(redis.host,  "localhost")
+        assertEquals(redis.port, 6379)
       }
     }
   }

@@ -14,7 +14,11 @@ final case class HttpConfig(
   port: Int
 )
 
-final case class AppConfig(httpConfig: HttpConfig) {
+case class RedisConfig(
+  host: String,
+  port: Int
+)
+final case class AppConfig(httpConfig: HttpConfig, redisConfig:RedisConfig) {
 
   private def makeHttpServerConfigOpt: Option[HttpServerConfig] =
     for {
