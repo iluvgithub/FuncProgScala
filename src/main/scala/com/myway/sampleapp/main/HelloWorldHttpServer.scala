@@ -1,7 +1,8 @@
 package com.myway.sampleapp.main
 
 import cats.effect._
-import com.myway.sampleapp.config.{AppConfigLoader, HttpServerConfig}
+import com.myway.sampleapp.config.{AppConfigLoader, HttpServerConfig, RedisConfig}
+import com.myway.sampleapp.redis.RedisReadWrite
 import com.myway.sampleapp.routes.HttpRoute
 import com.myway.sampleapp.service.SampleService
 import org.http4s.ember.server.EmberServerBuilder
@@ -19,19 +20,28 @@ object HelloWorldHttpServer extends IOApp {
   implicit val logger: Logger[IO]   = Slf4jLogger.getLogger[IO]
   implicit val logErr: slf4j.Logger = LoggerFactory.getLogger(getClass)
 
-  def server(httpConfig: HttpServerConfig): Resource[IO, Server] =
+  def server(httpConfig: HttpServerConfig, redisConfig: RedisConfig): Resource[IO, Server] =
     EmberServerBuilder
       .default[IO]
       .withHost(httpConfig.host)
       .withPort(httpConfig.port)
-      .withHttpApp(HttpRoute.httpApp[IO](SampleService()))
+      .withHttpApp(
+        HttpRoute.httpApp[IO](
+          SampleService(
+            RedisReadWrite.makeRedisReadWrite(redisConfig)
+          )
+        )
+      )
       .withShutdownTimeout(5.seconds)
       .build
 
   override def run(args: List[String]): IO[ExitCode] = (for {
     appConfig <- AppConfigLoader.loadConfig[IO]()
     httpCfg   <- appConfig.getHttpServerConfig[IO]
-    _ <- server(httpCfg).use(_ => logger.info(s"HTTP server started on $appConfig") >> IO.never)
+    redisConfig = appConfig.redisConfig
+    _ <- server(httpCfg, redisConfig).use(_ =>
+      logger.info(s"HTTP server started on $appConfig") >> IO.never
+    )
   } yield ExitCode.Success).handleErrorWith(switchToError)
 
   private def switchToError(t: Throwable) = {
