@@ -33,6 +33,7 @@
         <weaver.version>0.7.12</weaver.version>
         <logback.version>1.5.26</logback.version>
         <cats.retry.version>3.1.3</cats.retry.version>
+        <pureconfig.version>0.17.8</pureconfig.version>
     </properties>
 
     <repositories>
@@ -93,7 +94,35 @@
             <artifactId>derevo-circe-magnolia_2.13</artifactId>
             <version>${derevo.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig_2.13</artifactId>
+            <version>${pureconfig.version}</version> <!-- or latest patch in 0.17.x line -->
+        </dependency>
+        <dependency>
+            <groupId>com.comcast</groupId>
+            <artifactId>ip4s-core_2.13</artifactId>
+            <version>3.6.0</version> <!-- or 3.7.0 / 3.8.0-Mx if you want cutting edge -->
+        </dependency>
 
+        <!-- If you want YAML support (recommended for app.yml) -->
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig-yaml_2.13</artifactId>
+            <version>${pureconfig.version}</version>
+        </dependency>
+
+        <!-- Optional: Cats Effect integration (IO-based loading/saving) -->
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig-cats-effect_2.13</artifactId>
+            <version>${pureconfig.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pureconfig</groupId>
+            <artifactId>pureconfig-generic_2.13</artifactId>
+            <version>${pureconfig.version}</version>
+        </dependency>
 
         <!-- Redis4cats dependencies -->
         <dependency>
