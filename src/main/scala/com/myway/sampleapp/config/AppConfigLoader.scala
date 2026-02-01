@@ -2,10 +2,10 @@ package com.myway.sampleapp.config
 
 import cats.effect.Async
 import com.comcast.ip4s.{Host, Port}
-import pureconfig.ConfigSource
+import pureconfig._
+import pureconfig.generic.ProductHint
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax.CatsEffectConfigSource
-
 case class HttpServerConfig(
   host: Host,
   port: Port
@@ -13,13 +13,7 @@ case class HttpServerConfig(
 final case class HttpConfig(
   host: String,
   port: Int
-) {
-  def toServerConfig: Either[String, HttpServerConfig] =
-    for {
-      h <- Host.fromString(host).toRight(s"Invalid host: $host")
-      p <- Port.fromInt(port).toRight(s"Invalid port: $port")
-    } yield HttpServerConfig(h, p)
-}
+)
 
 final case class AppConfig(httpConfig: HttpConfig) {
 
@@ -29,7 +23,7 @@ final case class AppConfig(httpConfig: HttpConfig) {
       p <- Port.fromInt(httpConfig.port)
     } yield HttpServerConfig(h, p)
 
-  def fromOption[F[_]: Async, A](opt: Option[A], error: => Throwable): F[A] =
+  private def fromOption[F[_]: Async, A](opt: Option[A], error: => Throwable): F[A] =
     opt match {
       case Some(value) => Async[F].pure(value)
       case None        => Async[F].raiseError(error)
@@ -37,10 +31,17 @@ final case class AppConfig(httpConfig: HttpConfig) {
   def getHttpServerConfig[F[_]: Async]: F[HttpServerConfig] =
     fromOption(makeHttpServerConfigOpt, new RuntimeException)
 }
-object AppConfigLoader {
-  def loadConfig[F[_]: Async](
-    source: ConfigSource = ConfigSource.resources("application.yml")
-  ): F[AppConfig] =
-    Async[F].map(source.loadF[F, HttpConfig]())(AppConfig(_))
 
-}
+object AppConfigLoader {
+  implicit def httpHint: ProductHint[HttpConfig] =
+    ProductHint[HttpConfig](ConfigFieldMapping(CamelCase, KebabCase))
+
+  implicit def appHint: ProductHint[AppConfig] =
+    ProductHint[AppConfig](ConfigFieldMapping(CamelCase, KebabCase))
+  def loadConfig[F[_]: Async](
+    source: ConfigSource = ConfigSource.resources("application.conf")
+  ): F[AppConfig] = source.loadF[F, AppConfig]
+
+  // Async[F].map(source.loadF[F, HttpConfig]())(AppConfig(_))
+
+} // or pureconfig.generic.auto.exported if using Scala 3 style in 2.13 project
