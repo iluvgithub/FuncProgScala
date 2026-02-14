@@ -7,7 +7,7 @@ import fs2.concurrent.SignallingRef
 
 import scala.concurrent.duration.DurationInt
 
-object SignallingRef extends IOApp {
+object SignallingRefSandbox extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
     def stream(signal: SignallingRef[IO, Boolean]): Stream[IO, Int] =
@@ -21,7 +21,7 @@ object SignallingRef extends IOApp {
         .eval(IO.sleep(2.second) >> signal.set(true) >> IO(println("STOP")) >> IO(1))
         .repeat
         .interruptWhen(signal.discrete)
-    val ioSignal: IO[SignallingRef[IO, Boolean]] = SignallingRef[IO, Boolean](false)
+    val ioSignal: IO[SignallingRef[IO, Boolean]] = SignallingRef(false)
 
     val io: IO[Unit] =
       ioSignal.flatMap(signal => stream(signal).merge(stream2(signal)).compile.drain)
@@ -30,7 +30,7 @@ object SignallingRef extends IOApp {
 }
 object Merge extends IOApp {
 
-  private def helloWords0[F[_]] =
+  private def helloWords0[F[_]]: Stream[F, String] =
     Stream[F, String]("Hello", "Cádiz", "Spain", "South", "Sun").map(x => s"_$x")
   private def goodbyeWords0[F[_]] = Stream[F, String]("Goodbye", "London", "UK", "North", "Rain", "Next")
 
@@ -39,13 +39,13 @@ object Merge extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
 
-    val stream: Stream[IO, String] = program(helloWords, goodbyeWords)
+    val stream: Stream[IO, String] = program(helloWords[IO], goodbyeWords[IO])
 
     stream.foreach(IO.println).compile.drain.as(ExitCode.Success) >>
       IO(ExitCode.Success)
   }
 
-  def program[F[_]: Concurrent, A](left: Stream[F, A], right: Stream[F, A]): Stream[F, A] =
+  def program[F[_]: Temporal, A](left: Stream[F, A], right: Stream[F, A]): Stream[F, A] =
     // left.interleave(right)
     left merge right
 }
