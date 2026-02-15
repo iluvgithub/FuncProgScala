@@ -5,7 +5,7 @@ import cats.syntax.all._
 
 import scala.collection.immutable.Queue
 
-object ProducerConsumerSandbox {
+object ProducerConsumerSync {
 
   def producer[F[_]: Sync: Console](queueR: Ref[F, Queue[Int]], counter: Int, max: Int): F[Unit] =
     for {
