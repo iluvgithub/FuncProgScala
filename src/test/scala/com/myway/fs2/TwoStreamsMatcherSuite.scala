@@ -21,7 +21,7 @@ class TwoStreamsMatcherSuite extends CatsEffectSuite {
   test(" emit in sorted order case 2") {
     // arrange
     val stream1: Stream[IO, Int] = Stream.emits(List(0, 2, 5))
-    val stream2: Stream[IO, Int] = Stream.emits(List(1, 2, 3, 4, 5))
+    val stream2: Stream[IO, Int] = Stream.emits(List(-1, 1, 2, 3, 4, 5))
     // act
     val outIo: IO[List[Int]] =
       TwoStreamsMatcher
