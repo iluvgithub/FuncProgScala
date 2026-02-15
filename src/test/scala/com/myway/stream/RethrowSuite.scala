@@ -9,11 +9,13 @@ class RethrowSuite extends CatsEffectSuite {
   test("rethrow succeeds when all values are Right") {
     val stream: Stream[IO, Int] =
       Stream
-        .emits(List[Either[Throwable, Int]](
-          Right(1),
-          Right(2),
-          Right(3)
-        ))
+        .emits(
+          List[Either[Throwable, Int]](
+            Right(1),
+            Right(2),
+            Right(3)
+          )
+        )
         .covary[IO]
         .rethrow
 
@@ -27,11 +29,13 @@ class RethrowSuite extends CatsEffectSuite {
 
     val stream: Stream[IO, Int] =
       Stream
-        .emits(List[Either[Throwable, Int]](
-          Right(1),
-          Left(boom),
-          Right(3) // never reached
-        ))
+        .emits(
+          List[Either[Throwable, Int]](
+            Right(1),
+            Left(boom),
+            Right(3) // never reached
+          )
+        )
         .covary[IO]
         .rethrow
 

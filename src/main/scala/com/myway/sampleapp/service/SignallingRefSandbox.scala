@@ -32,7 +32,8 @@ object Merge extends IOApp {
 
   private def helloWords0[F[_]]: Stream[F, String] =
     Stream[F, String]("Hello", "Cádiz", "Spain", "South", "Sun").map(x => s"_$x")
-  private def goodbyeWords0[F[_]] = Stream[F, String]("Goodbye", "London", "UK", "North", "Rain", "Next")
+  private def goodbyeWords0[F[_]] =
+    Stream[F, String]("Goodbye", "London", "UK", "North", "Rain", "Next")
 
   private def helloWords[F[_]: Temporal]   = helloWords0.metered(150.millis)
   private def goodbyeWords[F[_]: Temporal] = goodbyeWords0.metered(50.millis)
