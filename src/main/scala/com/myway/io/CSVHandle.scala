@@ -33,7 +33,7 @@ object CSVHandle extends IOApp {
 
   def run(args: List[String]): IO[ExitCode] = {
 
-    val url: URL       = getClass.getClassLoader.getResource("sample/data.csv")
+    val url: URL = getClass.getClassLoader.getResource("sample/data.csv")
     val filePath: File = new File(url.getPath)
     val handle         = new FileCSVHandle(filePath)
 
