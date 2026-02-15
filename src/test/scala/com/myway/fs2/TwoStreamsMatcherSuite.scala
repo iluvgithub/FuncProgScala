@@ -20,16 +20,22 @@ class TwoStreamsMatcherSuite extends CatsEffectSuite {
 
   test(" emit in sorted order case 2") {
     // arrange
-    val stream1: Stream[IO, Int] = Stream.emits(List(0, 2, 5))
-    val stream2: Stream[IO, Int] = Stream.emits(List(-1, 1, 2, 3, 4, 5))
+    val stream1: Stream[IO, Int] = Stream.emits(List(0, 2, 5, 6))
+    val stream2: Stream[IO, Int] = Stream.emits(List(-1, 1, 2, 3, 4, 5, 7))
     // act
-    val outIo: IO[List[Int]] =
+    val outIoA: IO[List[Int]] =
+      TwoStreamsMatcher
+        .mergeSorted[IO, Int](stream1, stream2, s1 => s2 => s1.compareTo(s2))
+        .compile
+        .toList
+    val outIoB: IO[List[Int]] =
       TwoStreamsMatcher
         .mergeSorted[IO, Int](stream1, stream2, s1 => s2 => s1.compareTo(s2))
         .compile
         .toList
     // assert
-    outIo.map(out => assertEquals(out, List(2, 5)))
+    outIoA.map(out => assertEquals(out, List(2, 5)))
+    outIoB.map(out => assertEquals(out, List(2, 5)))
   }
 
   test(" merge combine") {
