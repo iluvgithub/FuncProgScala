@@ -22,7 +22,7 @@ object ProducerConsumerSandbox {
         }
       }
       _ <- Sync[F].whenA(iO.exists(_ % 10000 == 0))(Console[F].println(s"Consumed ${iO.get} items"))
-      out <- if(iO.getOrElse(-1).equals(max)) Sync[F].pure(iO) else consumer(queueR, max)
+      out <- if (iO.getOrElse(-1).equals(max)) Sync[F].pure(iO) else consumer(queueR, max)
     } yield out
 
 }
