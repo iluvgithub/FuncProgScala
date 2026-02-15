@@ -16,9 +16,9 @@ class ResourceFailureSandboxSuite extends CatsEffectSuite {
     // arrange
     val mockCallback: Releaser = mock[Releaser]
     when(mockCallback.release(any())).thenReturn(IO(()))
-    val toAquire: IO[String] = IO.println("acquire") *> IO("xy")
+    val toAcquire: IO[String] = IO.println("acquire") *> IO("xy")
     val goodResource: Resource[IO, String] =
-      Resource.make(toAquire)(s => IO.println("release resource") *> mockCallback.release(s))
+      Resource.make(toAcquire)(s => IO.println("release resource") *> mockCallback.release(s))
     // act
     val ioString: IO[String] = goodResource.use(IO(_))
     // assert
@@ -33,11 +33,11 @@ class ResourceFailureSandboxSuite extends CatsEffectSuite {
   test("failure on acquire") {
     // arrange
     val mockCallback: Releaser = mock[Releaser]
-    val toAquire: IO[String] =
+    val toAcquire: IO[String] =
       IO.println("acquire") *> IO.raiseError[String](new Exception("fail acquire"))
 
     val badResource: Resource[IO, String] =
-      Resource.make(toAquire)(s => IO.println("release resource") *> mockCallback.release(s))
+      Resource.make(toAcquire)(s => IO.println("release resource") *> mockCallback.release(s))
     // act
     val ioString: IO[String] = badResource.use(IO(_))
     // assert
@@ -54,9 +54,9 @@ class ResourceFailureSandboxSuite extends CatsEffectSuite {
     // arrange
     val mockCallback: Releaser = mock[Releaser]
     when(mockCallback.release(any())).thenReturn(IO(()))
-    val toAquire: IO[String] = IO.println("acquire") *> IO("xy")
+    val toAcquire: IO[String] = IO.println("acquire") *> IO("xy")
     val badResource: Resource[IO, String] =
-      Resource.make(toAquire)(s => IO.println("release resource") *> mockCallback.release(s))
+      Resource.make(toAcquire)(s => IO.println("release resource") *> mockCallback.release(s))
     // act
     val ioString: IO[String] =
       badResource.use(_ => IO.raiseError[String](new Exception("fail acquire")))
@@ -77,9 +77,9 @@ class ResourceFailureSandboxSuite extends CatsEffectSuite {
     when(mockCallback.release(any()))
       // .thenReturn(IO(()))
       .thenReturn(IO.raiseError(new RuntimeException("cannot close")))
-    val toAquire: IO[String] = IO.println("acquire") *> IO("xy")
+    val toAcquire: IO[String] = IO.println("acquire") *> IO("xy")
     val badResource: Resource[IO, String] =
-      Resource.make(toAquire)(s => IO.println("release resource") *> mockCallback.release(s))
+      Resource.make(toAcquire)(s => IO.println("release resource") *> mockCallback.release(s))
     // act
     val ioString: IO[String] = badResource.use(IO(_))
     // assert
