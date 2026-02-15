@@ -42,7 +42,7 @@ class TwoStreamsMatcherSuite extends CatsEffectSuite {
     // arrange
     val infiniteInts: Stream[IO, Int] = Stream.iterate(0)(_ + 1)
     case class Foo(key: String, value: Int) {
-      def merge(that: Foo) = Foo(key, this.value + that.value)
+      def merge(that: Foo) = IO(Foo(key, this.value + that.value))
     }
     val stream1: Stream[IO, Foo] =
       Stream.emits(List("a", "b", "c", "d", "f")).zip(infiniteInts).map { case (k, v) => Foo(k, v) }
