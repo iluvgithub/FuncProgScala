@@ -2,6 +2,7 @@ package com.myway.expression.problem
 
 case class Const(c: Int)
 case class Add[A, B](l: A, r: B)
+case class Mult[A, B](l: A, r: B)
 trait Expr[A]
 
 trait Eval[A] {
@@ -73,5 +74,33 @@ object Neg {
   ): Show[Neg[A]] = new Show[Neg[A]] {
     def show(a: Neg[A])(implicit ev: Expr[Neg[A]]): String =
       "-" + subShow.show(a.a)
+  }
+}
+
+object Mult {
+
+  implicit def expr[A, B](implicit
+    leftExpr: Expr[A],
+    rightExpr: Expr[B]
+  ): Expr[Mult[A, B]] = new Expr[Mult[A, B]] {}
+
+  implicit def eval[A, B](implicit
+    leftExpr: Expr[A],
+    rightExpr: Expr[B],
+    leftEval: Eval[A],
+    rightEval: Eval[B]
+  ): Eval[Mult[A, B]] = new Eval[Mult[A, B]] {
+    def eval(a: Mult[A, B])(implicit ev: Expr[Mult[A, B]]): Int =
+      leftEval.eval(a.l) * rightEval.eval(a.r)
+  }
+
+  implicit def show[A, B](implicit
+    leftExpr: Expr[A],
+    rightExpr: Expr[B],
+    leftShow: Show[A],
+    rightShow: Show[B]
+  ): Show[Mult[A, B]] = new Show[Mult[A, B]] {
+    def show(a: Mult[A, B])(implicit ev: Expr[Mult[A, B]]): String =
+      leftShow.show(a.l) + "*" + rightShow.show(a.r)
   }
 }
