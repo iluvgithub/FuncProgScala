@@ -5,11 +5,11 @@ import org.scalatest.matchers.should.Matchers
 
 class ExprTest extends AnyFunSuite with Matchers {
 
-  val four = Const(4)
+  val four: Const = Const(4)
 
-  val twoPlusThree = Add(Const(2), Const(3))
+  val twoPlusThree: Add[Const, Const] = Add(Const(2), Const(3))
 
-  val twoPlusThreeNegated = Neg(twoPlusThree)
+  val twoPlusThreeNegated: Neg[Add[Const, Const]] = Neg(twoPlusThree)
 
   test("eval ") {
     // arrange
