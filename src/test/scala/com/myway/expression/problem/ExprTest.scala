@@ -15,6 +15,8 @@ class ExprTest extends AnyFunSuite with Matchers {
 
   val twoTimeThreeNegated: Neg[Mult[Const, Const]] = Neg(twoTimeThree)
 
+  val expression: Add[Neg[Const], Mult[Const, Const]] = Add(Neg(Const(3)), Mult(Const(2), Const(4)))
+
   test("eval ") {
     // arrange
     def eval[A: Expr: Eval](a: A): Int = implicitly[Eval[A]].eval(a)
@@ -24,6 +26,8 @@ class ExprTest extends AnyFunSuite with Matchers {
     eval(twoPlusThreeNegated) shouldBe -5
     eval(twoTimeThree) shouldBe 6
     eval(twoTimeThreeNegated) shouldBe -6
+
+    eval(expression) shouldBe 5
   }
 
   test("show ") {
@@ -35,6 +39,8 @@ class ExprTest extends AnyFunSuite with Matchers {
     show(twoPlusThreeNegated) shouldBe "-(2+3)"
     show(twoTimeThree) shouldBe "2*3"
     show(twoTimeThreeNegated) shouldBe "-2*3"
+
+    show(expression) shouldBe "(-3+2*4)"
   }
 
 }
