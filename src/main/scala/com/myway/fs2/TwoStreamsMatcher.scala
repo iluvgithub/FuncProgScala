@@ -36,8 +36,7 @@ case object TwoStreamsMatcher {
             case Some((h2, t2)) =>
               val cmp = comparator(getter(h1))(getter(h2))
 
-
-              if (cmp.equals(0)) Pull.eval(combine(h1)(h2)).flatMap(Pull.output1)  >> go(t1, t2)
+              if (cmp.equals(0)) Pull.eval(combine(h1)(h2)).flatMap(Pull.output1) >> go(t1, t2)
               else if (cmp < 0) {
                 go(t1, s2)
               } else {
