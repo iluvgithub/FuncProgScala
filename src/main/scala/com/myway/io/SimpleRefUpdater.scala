@@ -1,6 +1,6 @@
 package com.myway.io
 
-import cats.effect.{Ref, Temporal}
+import cats.effect.{Ref, Resource, Temporal}
 import cats.syntax.all._
 
 import scala.concurrent.duration._
@@ -15,4 +15,9 @@ object SimpleRefUpdater {
       _   <- ref.update(_ :+ 3)
       out <- ref.get
     } yield out
+
+  def runInResource[F[_]: Temporal](
+    ref: Ref[F, List[Int]],
+    release: List[Int] => F[Unit]
+  ): Resource[F, List[Int]] = Resource.make(run(ref))(release)
 }
