@@ -1,4 +1,4 @@
-package com.myway.catseffect.sync
+package com.myway.catseffect.async
 import cats.Parallel
 import cats.effect.{Async, IO, IOApp}
 
