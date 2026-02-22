@@ -1,10 +1,7 @@
 package com.myway.fs2
 
 import cats.Monad
-import fs2.io.file.Flag
 import fs2.{Pull, Stream}
-
-import scala.collection.View.FlatMap
 
 case object TwoStreamsMatcher {
 

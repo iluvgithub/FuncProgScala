@@ -1,6 +1,6 @@
 package com.myway.sampleapp.service
 
-import cats.effect.kernel.{Concurrent, Temporal}
+import cats.effect.kernel.Temporal
 import cats.effect.{ExitCode, IO, IOApp}
 import fs2._
 import fs2.concurrent.SignallingRef
