@@ -23,7 +23,7 @@ object AsyncIODelay extends IOApp.Simple {
       }
     } yield micros
 
-  def program1[F[_]: Async : Parallel]: F[Int] =
+  def program1[F[_]: Async: Parallel]: F[Int] =
     (1 to 12).toList
       .map(_ => randomSleepMicros)
       //  .parSequence
