@@ -12,7 +12,7 @@ object AsyncIODelay extends IOApp.Simple {
   import scala.concurrent.duration._
   import scala.util.Random
 
-  def randomSleepMicros[F[_]: Async: Temporal]: F[Int] =
+  def randomSleepMicros[F[_]: Async]: F[Int] =
     for {
       micros <- Sync[F].delay {
         Random.nextInt(800) // fast sync work (< 1 ms)
