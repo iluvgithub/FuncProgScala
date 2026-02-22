@@ -4,6 +4,7 @@ import cats.effect.{Async, IO, IOApp}
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneOffset}
+
 object AsyncIODelay extends IOApp.Simple {
 
   import cats.effect.{Sync, Temporal}
@@ -26,8 +27,8 @@ object AsyncIODelay extends IOApp.Simple {
   def program1[F[_]: Async: Parallel]: F[Int] =
     (1 to 12).toList
       .map(_ => randomSleepMicros)
-      //  .parSequence
-      .sequence
+      .parSequence
+      // .sequence
       .map(_.sum)
 
   def io(prefix: String): IO[LocalDateTime] = for {
