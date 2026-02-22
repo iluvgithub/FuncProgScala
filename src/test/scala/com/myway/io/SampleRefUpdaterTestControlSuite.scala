@@ -1,0 +1,29 @@
+package com.myway.io
+import cats.effect._
+import cats.effect.testkit.TestControl
+import munit.CatsEffectSuite
+
+import scala.concurrent.duration._
+class SampleRefUpdaterTestControlSuite extends CatsEffectSuite {
+
+  test("RefProgram updates Ref state over time direct syntax") {
+    TestControl.executeEmbed(for {
+      ref   <- Ref.of[IO, List[Int]](List.empty)
+      s0    <- ref.get
+      fiber <- SimpleRefUpdater.run(ref).start
+      _     <- IO.sleep(100.millis)
+      s1    <- ref.get
+
+      _  <- IO.sleep(1.second)
+      s2 <- ref.get
+
+      _  <- fiber.join
+      s3 <- ref.get
+    } yield {
+      assertEquals(s0, List())
+      assertEquals(s1, List(1))
+      assertEquals(s2, List(1, 2))
+      assertEquals(s3, List(1, 2, 3))
+    })
+  }
+}
