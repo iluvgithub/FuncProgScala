@@ -24,9 +24,9 @@ object SampleRefUpdaterWeaverSuite extends SimpleIOSuite {
       duration = end - start
       _         <- IO(expect(duration >= 1900.millis))
       finalList <- ref.get
-    } yield {
-      expect(check == List())
+    } yield List(
+      expect(check == List(1, 2)),
       expect(finalList == List(1, 2, 3))
-    }
+    ).reduce(_ and _)
   }
 }
