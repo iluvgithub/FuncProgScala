@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 class JsonTest extends AnyFunSuite {
 
-  test(" ") {
+  test("simple serialization into String ") {
     // arrange
     final case class Person(name: String, email: String)
     implicit val personJsonWriter: JsonWriter[Person] = new JsonWriter[Person] {
